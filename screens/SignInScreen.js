@@ -27,7 +27,9 @@ export default class SignInScreen extends React.Component {
     header: null,
   };
 
-  
+  state = {
+    token : ''
+  };
 
   componentDidMount(){
     
@@ -57,11 +59,12 @@ export default class SignInScreen extends React.Component {
     });
     let k = await this.createTokenWithCode(params.code);
     let user = await this.getUserInfo(k.access_token);
-    console.log('User info ', user);
-    const { navigate } = this.props.navigation;
+    this.setState({
+      token : k.access_token
+    })
+   
     this.props.navigation.navigate('Home', { user });
   };
-
 
   getUserInfo = async (token) => {
     const r = await fetch('https://api.github.com/user', {
@@ -93,8 +96,7 @@ export default class SignInScreen extends React.Component {
       <View style={styles.container}>
        <TouchableOpacity
          style={styles.button}
-         onPress={this.onSignButtonPress}
-       >
+         onPress={this.onSignButtonPress}>
          <Text> SignIn With GitHub </Text>
        </TouchableOpacity>
       </View>

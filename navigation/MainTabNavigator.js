@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import UserScreen from '../screens/ViewInfo';
+import RepoScreen from '../screens/RepoScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -24,12 +24,12 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const LinksStack = createStackNavigator({
-  User: UserScreen,
+const RepoStack = createStackNavigator({
+  Repo: RepoScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+RepoStack.navigationOptions = {
+  tabBarLabel: 'Repos',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -40,5 +40,5 @@ LinksStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  RepoStack,
 });
