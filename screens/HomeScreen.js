@@ -12,8 +12,13 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
+  constructor(props){
+    super(props);
+    //console.log('props ', props);
+  }
+
   componentDidMount(){
-    console.log('data in home ', this.props);
+    console.log('data in home ', this.props.navigation.dangerouslyGetParent().getParam('user').name);
     this.props.screenProps = {
       "ad" : "hello"
     }
@@ -22,10 +27,10 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-      <Image source={{ uri: this.props.navigation.state.params.user.avatar_url}} style={styles.photo} />
+      <Image source={{ uri: this.props.navigation.dangerouslyGetParent().getParam('user').avatar_url}} style={styles.photo} />
         <View style={styles.separator}></View>
         <Text style={styles.text}>
-          {`${this.props.navigation.state.params.user.name}`}
+          {`${this.props.navigation.dangerouslyGetParent().getParam('user').name}`}
         </Text>
       </View>
     );

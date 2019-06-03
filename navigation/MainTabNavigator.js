@@ -1,44 +1,37 @@
 import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
-import TabBarIcon from '../components/TabBarIcon';
+import { createBottomTabNavigator } from 'react-navigation';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../screens/HomeScreen';
 import RepoScreen from '../screens/RepoScreen';
-
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-});
-
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
-};
-
-const RepoStack = createStackNavigator({
-  Repo: RepoScreen,
-});
-
-RepoStack.navigationOptions = {
-  tabBarLabel: 'Repos',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
-};
+import UpdateScreen from '../screens/UpdateScreen';
 
 export default createBottomTabNavigator({
-  HomeStack,
-  RepoStack,
+  Home : {
+    screen : HomeScreen
+  },
+  Repo : {
+    screen : RepoScreen
+  }, 
+  Update : {
+    screen : UpdateScreen
+  }
+},
+{
+  defaultNavigationOptions: ({ navigation }) => ({
+    tabBarIcon: ({ focused, tintColor }) => {
+      const { routeName } = navigation.state;
+      let IconComponent = Ionicons;
+      let iconName;
+      if (routeName === 'Home') {
+        iconName = `ios-home`;
+      } else  {
+        iconName = `ios-settings`;
+      }
+      return <IconComponent name={iconName} size={25} color={tintColor} />;
+    }
+  }),
+  tabBarOptions: {
+    activeTintColor: 'tomato',
+    inactiveTintColor: 'gray',
+  },
 });
