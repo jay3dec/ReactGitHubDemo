@@ -1,23 +1,19 @@
 import React from 'react';
 import {
-  FlatList,
   StyleSheet,
   Text,
   Picker,
-  TouchableHighlight,
-  TouchableOpacity,
   View,
   TextInput,
   Button
 } from 'react-native';
-import { Icon } from 'expo'
 
 export default class UpdateScreen extends React.Component {
   static navigationOptions = () => {
     return {
        
     };
-}
+  }
 
   state = {
     options : [],
@@ -34,6 +30,7 @@ export default class UpdateScreen extends React.Component {
   }
 
   loadRepoList = () => {
+    let username = this.props.navigation.dangerouslyGetParent().getParam('user').login;
     let requestHeaders = new Headers();
     requestHeaders.append('pragma', 'no-cache');
     requestHeaders.append('cache-control', 'no-cache');
@@ -42,7 +39,7 @@ export default class UpdateScreen extends React.Component {
       method: 'GET',
       headers: requestHeaders,
     };
-    const url = `https://api.github.com/users/jay3dec/repos?sort=created`;
+    const url = `https://api.github.com/users/${username}/repos?sort=created`;
     fetch(url, requestParams)
     .then(res => res.json())
     .then((result) => {
@@ -66,8 +63,9 @@ export default class UpdateScreen extends React.Component {
   }
 
   updateRepo = (newName, oldName) => {
-    console.log(`new name is ${newName} Old name is ${oldName}`);
     let token = this.props.navigation.dangerouslyGetParent().getParam('token');
+    let username = this.props.navigation.dangerouslyGetParent().getParam('user').login;
+
     let requestHeaders = new Headers();
     requestHeaders.append('Authorization', 'token ' + token);
 
@@ -78,13 +76,11 @@ export default class UpdateScreen extends React.Component {
         name : newName
       })
     };
-    let url = `https://api.github.com/repos/jay3dec/${oldName}`
+    let url = `https://api.github.com/repos/${username}/${oldName}`
     return fetch(url, requestParams)
       .then(() => { return {status : 200} })
       .catch(error => {error : error});
   }
-
-
 
   render() {
     let serviceItems = this.state.options.map( (s, i) => {

@@ -64,14 +64,14 @@ export default class RepoScreen extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.navigation.state.params.refesh) {
+    if (nextProps.navigation.state.params.refresh) {
       this.loadRepoList();
     }
   }
 
   
   loadRepoList = () => {
-    console.log('ME AGAIN HERE')
+    let username = this.props.navigation.dangerouslyGetParent().getParam('user').login;
     let requestHeaders = new Headers();
     requestHeaders.append('pragma', 'no-cache');
     requestHeaders.append('cache-control', 'no-cache');
@@ -81,24 +81,15 @@ export default class RepoScreen extends React.Component {
       headers: requestHeaders,
     };
     
-    const url = `https://api.github.com/users/jay3dec/repos?sort=created`;
-    // fetch(url, requestParams)
-    // .then(res => res.json())
-    // .then((result) => {
-    //   console.log('result is ',result)
-    //   this.setState({
-    //     dataSource : result || []
-    //   }) 
-    // })
-    axios.get(url, requestParams)
+    const url = `https://api.github.com/users/${username}/repos?sort=created`;
+    fetch(url, requestParams)
+    .then(res => res.json())
     .then((result) => {
       this.setState({
-        dataSource : result.data || []
+        dataSource : result || []
       }) 
     })
-    .catch((error)=>{
-      console.log(error)
-    })
+    
   }
 
   onPressAddRepo = async () => {
@@ -139,6 +130,7 @@ export default class RepoScreen extends React.Component {
 
   deleteRepo = (repoName) => {
     let token = this.props.navigation.dangerouslyGetParent().getParam('token');
+    let username = this.props.navigation.dangerouslyGetParent().getParam('user').login;
     let requestHeaders = new Headers();
     requestHeaders.append('Authorization', 'token ' + token);
 
@@ -146,7 +138,7 @@ export default class RepoScreen extends React.Component {
       method: 'DELETE',
       headers: requestHeaders,
     };
-    let url = `https://api.github.com/repos/jay3dec/${repoName}`
+    let url = `https://api.github.com/repos/${username}/${repoName}`
     return fetch(url, requestParams)
       .then(() => { return {status : 200} })
       .catch(error => {error : error});
